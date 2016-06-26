@@ -1,14 +1,16 @@
-package pubsub_test
+// package pubsub_test
+package pubsub
 
 import (
-	"github.com/mattn/go-pubsub"
+	// "github.com/AlexStocks/go-pubsub"
 	"testing"
 	"time"
 )
 
 func TestInt(t *testing.T) {
 	done := make(chan int)
-	ps := pubsub.New()
+	// ps := pubsub.New()
+	ps := New()
 	ps.Sub(func(i int) {
 		done <- i
 	})
@@ -21,7 +23,8 @@ func TestInt(t *testing.T) {
 
 func TestString(t *testing.T) {
 	done := make(chan string)
-	ps := pubsub.New()
+	// ps := pubsub.New()
+	ps := New()
 	ps.Sub(func(s string) {
 		done <- s
 	})
@@ -38,7 +41,8 @@ type F struct {
 
 func TestStruct(t *testing.T) {
 	done := make(chan *F)
-	ps := pubsub.New()
+	// ps := pubsub.New()
+	ps := New()
 	ps.Sub(func(f *F) {
 		done <- f
 	})
@@ -52,7 +56,8 @@ func TestStruct(t *testing.T) {
 func TestOnly(t *testing.T) {
 	doneInt := make(chan int)
 	doneF := make(chan *F)
-	ps := pubsub.New()
+	// ps := pubsub.New()
+	ps := New()
 	ps.Sub(func(i int) {
 		doneInt <- i
 	})
@@ -73,7 +78,8 @@ func TestOnly(t *testing.T) {
 
 func TestClojure(t *testing.T) {
 	done := make(chan int)
-	ps := pubsub.New()
+	// ps := pubsub.New()
+	ps := New()
 	add := func() {
 		ps.Sub(func(i int) {
 			done <- i
@@ -95,7 +101,8 @@ func TestClojure(t *testing.T) {
 
 func TestLeave(t *testing.T) {
 	done := make(chan int)
-	ps := pubsub.New()
+	// ps := pubsub.New()
+	ps := New()
 
 	f := func(i int) {
 		done <- i
@@ -119,12 +126,14 @@ func TestLeave(t *testing.T) {
 
 func TestWrap(t *testing.T) {
 	done := make(chan int)
-	ps := pubsub.New()
+	// ps := pubsub.New()
+	ps := New()
 
 	f := func(i int) {
 		done <- i
 	}
-	w1, w2 := pubsub.NewWrap(f), pubsub.NewWrap(f)
+	// w1, w2 := pubsub.NewWrap(f), pubsub.NewWrap(f)
+	w1, w2 := NewWrap(f), NewWrap(f)
 	ps.Sub(w1)
 	ps.Sub(w2)
 	ps.Pub(1)

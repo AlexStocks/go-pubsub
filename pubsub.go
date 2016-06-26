@@ -94,12 +94,19 @@ func (ps *PubSub) Error() chan error {
 
 // Sub subscribe to the PubSub.
 func (ps *PubSub) Sub(f interface{}) error {
-	check := f
-	w, wrapped := f.(*wrap)
+	var (
+		wrapped bool
+		w       *wrap
+		check   interface{}
+		rf      reflect.Value
+	)
+
+	check = f
+	w, wrapped = f.(*wrap)
 	if wrapped { // check wrapped function instead
 		check = w.f
 	}
-	rf := reflect.ValueOf(check)
+	rf = reflect.ValueOf(check)
 	if rf.Kind() != reflect.Func {
 		return errors.New("Not a function")
 	}
@@ -107,12 +114,12 @@ func (ps *PubSub) Sub(f interface{}) error {
 		return errors.New("Number of arguments should be 1")
 	}
 	ps.m.Lock()
-	defer ps.m.Unlock()
 	if w, wrapped := f.(*wrap); wrapped {
 		ps.w = append(ps.w, w)
 	} else {
 		ps.w = append(ps.w, &wrap{f: f})
 	}
+	ps.m.Unlock()
 	return nil
 }
 
